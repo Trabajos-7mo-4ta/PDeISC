@@ -1,0 +1,60 @@
+.crear{
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 400px;
+    justify-content: space-between;
+    text-align: center;
+    width: 300px;
+}
+
+.crear ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.crear li{
+    padding: 5px;
+
+}
+
+.crear button{
+    background-color: #f1f1f1;
+    border: 1px solid black;
+    border-radius: 0;
+    height: 50px;
+    font-size: larger;
+    transition: border .7s, background-color .7s, color .7s, border-radius .7s;
+}
+
+.crear button:hover{
+    border: none;
+    background-color: rgb(48, 48, 221);
+    border-radius: 30px;
+
+}
+
+input{
+    width: 100%;
+    height: 30px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label{
+    display: flex;
+    flex-direction: column;
+}
+
+.error{
+    color: red;
+    font-weight: bold;
+}
