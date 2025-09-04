@@ -1,0 +1,80 @@
+.lista-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.lista-container h2 {
+  margin-bottom: 1rem;
+}
+
+.lista-container button {
+  margin-bottom: 1rem;
+}
+
+
+.lista-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.lista-usuarios th,
+.lista-usuarios td {
+  border: 1px solid #ccc;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.lista-usuarios th {
+  background-color: #333;
+  color: white;
+}
+
+.lista-usuarios td button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .lista-usuarios,
+  .lista-usuarios thead,
+  .lista-usuarios tbody,
+  .lista-usuarios th,
+  .lista-usuarios td,
+  .lista-usuarios tr {
+    display: block;
+    width: 100%;
+  }
+
+  .lista-usuarios thead {
+    display: none; 
+  }
+
+  .lista-usuarios tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.8rem;
+    background-color: #1e1e1e;
+  }
+
+  .lista-usuarios td {
+    border: none;
+    padding: 0.5rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .lista-usuarios td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    flex-basis: 40%;
+    color: #ccc;
+  }
+}
