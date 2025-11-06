@@ -37,7 +37,7 @@ export const createRoutine = async (req, res) => {
     const rol = userRes.rows[0]?.rol || 'usuario';
 
     // 🔹 Determinar si la rutina será pública según el rol
-    const publica = rol === 'entrenador';
+    const publica = rol === 'entrenador' || rol === 'admin';
 
     // Si esta rutina se marca como actual, desactivamos las demás del usuario
     if (actual) {
@@ -177,5 +177,56 @@ export const deleteRoutine = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al eliminar rutina' });
+  }
+};
+
+export const copyRoutine = async (req, res) => {
+  try {
+    const { id } = req.params; // rutina original
+    const { usuario_id } = req.body;
+
+    // 1. Obtener rutina original
+    const originalRes = await pool.query('SELECT * FROM routines WHERE id=$1', [id]);
+    if (originalRes.rows.length === 0) return res.status(404).json({ error: 'Rutina no encontrada' });
+    const original = originalRes.rows[0];
+
+    // 2. Crear nueva rutina con valores copiados
+    const nuevaRes = await pool.query(
+      `INSERT INTO routines (titulo, descripcion, usuario_id, publica, actual)
+       VALUES ($1, $2, $3, false, false) RETURNING *`,
+      [original.titulo, original.descripcion, usuario_id]
+    );
+    const nuevaRutina = nuevaRes.rows[0];
+
+    // 3. Obtener días de la rutina original
+    const diasRes = await pool.query('SELECT * FROM days WHERE rutina_id=$1', [id]);
+    const diasOriginales = diasRes.rows;
+
+    for (const dia of diasOriginales) {
+      // 4. Crear día en la nueva rutina
+      const nuevoDiaRes = await pool.query(
+        `INSERT INTO days (rutina_id, nombre_dia, orden) VALUES ($1, $2, $3) RETURNING *`,
+        [nuevaRutina.id, dia.nombre_dia, dia.orden]
+      );
+      const nuevoDia = nuevoDiaRes.rows[0];
+
+      // 5. Obtener ejercicios del día original
+      const ejerciciosRes = await pool.query('SELECT * FROM exercises WHERE dia_id=$1', [dia.id]);
+      const ejercicios = ejerciciosRes.rows;
+
+      for (const ej of ejercicios) {
+        // 6. Crear ejercicio en el nuevo día
+        await pool.query(
+          `INSERT INTO exercises (dia_id, catalogo_id, series, repeticiones)
+           VALUES ($1, $2, $3, $4)`,
+          [nuevoDia.id, ej.catalogo_id, ej.series, ej.repeticiones]
+        );
+      }
+    }
+
+    res.json({ message: 'Rutina copiada correctamente', rutina: nuevaRutina });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al copiar rutina' });
   }
 };

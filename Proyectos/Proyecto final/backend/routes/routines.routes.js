@@ -8,7 +8,8 @@ import {
   deleteRoutine,
   setRoutineAsCurrent,
   getCurrentRoutine,
-  getRoutineDetails
+  getRoutineDetails,
+  copyRoutine
 } from '../controllers/routines.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 
@@ -22,5 +23,7 @@ router.post('/', verifyToken, createRoutine);
 router.put('/:id', verifyToken, updateRoutine);
 router.put('/:id/actual', verifyToken, setRoutineAsCurrent); // marcar como actual
 router.delete('/:id', verifyToken, deleteRoutine);
+router.post('/:id/copiar', verifyToken, copyRoutine);
+
 
 export default router;

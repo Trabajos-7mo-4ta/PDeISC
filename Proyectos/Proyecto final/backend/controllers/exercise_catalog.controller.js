@@ -37,3 +37,25 @@ export const deleteExercise = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar ejercicio' });
   }
 };
+
+export const updateExercise = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre_ejercicio, grupo_muscular, descripcion } = req.body;
+
+    const result = await pool.query(
+      `UPDATE exercise_catalog
+       SET nombre_ejercicio = $1,
+           grupo_muscular = $2,
+           descripcion = $3
+       WHERE id = $4
+       RETURNING *`,
+      [nombre_ejercicio, grupo_muscular, descripcion, id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar ejercicio' });
+  }
+};
