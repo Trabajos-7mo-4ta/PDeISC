@@ -1,5 +1,5 @@
 // services/api.ts
-const API_URL = 'http://localhost:4000/api';
+const API_URL = 'https://backendplangym-production.up.railway.app/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 🧩 Función auxiliar: agrega automáticamente el token a cada request
@@ -237,6 +237,12 @@ export async function createProgress(
   semana: number | string,
   descripcion: string
 ) {
+  console.log('Enviando progreso:', {
+  usuario_id,
+  rutina_id,
+  semana: parseInt(semana as string, 10),
+  descripcion,
+  });
   return await fetchWithAuth(`${API_URL}/progress`, {
     method: 'POST',
     body: JSON.stringify({
@@ -251,3 +257,78 @@ export async function createProgress(
 export async function deleteProgress(id: number) {
   return await fetchWithAuth(`${API_URL}/progress/${id}`, { method: 'DELETE' });
 }
+
+export async function createExerciseProgress(
+  progress_id: number,
+  ejercicio_id: number,
+  peso: number,
+  repeticiones: number,
+  series: number,
+  fecha: string
+) {
+  return await fetchWithAuth(`${API_URL}/exercise-progress`, {
+    method: 'POST',
+    body: JSON.stringify({
+      progress_id,
+      ejercicio_id,
+      peso,
+      repeticiones,
+      series,
+      fecha,
+    }),
+  });
+}
+
+export async function getExerciseProgressByUser(usuario_id: number) {
+  return await fetchWithAuth(`${API_URL}/exercise-progress/${usuario_id}`);
+}
+
+export async function copyRoutine(routineId: number, usuario_id: number) {
+  return await fetchWithAuth(`${API_URL}/routines/${routineId}/copiar`, {
+    method: 'POST',
+    body: JSON.stringify({ usuario_id }),
+  });
+}
+
+export async function updateCatalogExercise(
+  id: number,
+  nombre_ejercicio: string,
+  grupo_muscular: string,
+  descripcion: string
+) {
+  return await fetchWithAuth(`${API_URL}/exercise-catalog/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ nombre_ejercicio, grupo_muscular, descripcion }),
+  });
+}
+
+export async function getAllUsers() {
+  return await fetchWithAuth(`${API_URL}/users`);
+}
+
+export async function deleteUser(id: number) {
+  return await fetchWithAuth(`${API_URL}/users/${id}`, { method: 'DELETE' });
+}
+
+export async function updateUserRole(id: number, rol: string) {
+  return await fetchWithAuth(`${API_URL}/users/${id}/rol`, {
+    method: 'PUT',
+    body: JSON.stringify({ rol }),
+  });
+}
+
+export const loginWithGoogle = async (nombre: string, email: string, googleId: string) => {
+  try {
+    const res = await fetch('https://backendplangym-production.up.railway.app/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, email, googleId }),
+    });
+
+    const data = await res.json();
+    return { ok: res.ok, data };
+  } catch (error) {
+    console.error('Error en loginWithGoogle:', error);
+    return { ok: false, data: { error: 'Error de conexión con el servidor.' } };
+  }
+};

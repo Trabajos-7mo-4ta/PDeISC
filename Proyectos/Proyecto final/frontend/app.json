@@ -4,27 +4,37 @@
     "slug": "planes_gym",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/PlanGym_logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/PlanGym_logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ff7f00"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/PlanGym_logo.png",
+        "backgroundColor": "#ff7f00"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.ezequiel_moyano.planes_gym"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/PlanGym_logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2db70f45-2d2b-4c31-ab94-dcb62b99e8c8"
+      }
+    },
+    "owner": "ezequiel_moyano",
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }
